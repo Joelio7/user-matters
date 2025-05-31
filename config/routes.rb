@@ -5,6 +5,9 @@ Rails.application.routes.draw do
       post :login
       get :me
     end
+    
+    resources :users
+    resources :matters
   end
   
   get "up" => "rails/health#show", as: :rails_health_check

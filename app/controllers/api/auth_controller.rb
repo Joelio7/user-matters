@@ -4,7 +4,7 @@ class Api::AuthController < Api::ApplicationController
   before_action :authenticate_request, only: [:me]
   
   def signup
-    user = User.new(user_params)
+    user = User.new(user_params.merge(role: 'customer'))
     
     if user.save
       token = JwtService.encode(user_id: user.id)
@@ -53,6 +53,6 @@ class Api::AuthController < Api::ApplicationController
   attr_reader :current_user
   
   def user_params
-    params.permit(:name, :email, :password)
+    params.permit(:name, :email, :password, :firm_name)
   end
 end
