@@ -1,19 +1,22 @@
 class User < ApplicationRecord
   has_many :matters, dependent: :destroy
   
-  validates :name, presence: true
-  validates :email, presence: true, uniqueness: true
+  has_secure_password
   
-  def new_matters
-    matters.status_new
+  validates :name, presence: true
+  validates :email, presence: true, uniqueness: true, format: { with: URI::MailTo::EMAIL_REGEXP }
+  validates :password, length: { minimum: 6 }, if: -> { new_record? || !password.nil? }
+  
+  def pending_matters
+    matters.pending
   end
   
   def in_progress_matters
-    matters.status_in_progress
+    matters.in_progress
   end
   
   def completed_matters
-    matters.status_completed
+    matters.completed
   end
   
   def overdue_matters

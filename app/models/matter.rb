@@ -4,7 +4,6 @@ class Matter < ApplicationRecord
   validates :title, presence: true
   validates :state, presence: true
   
-  # Simple string validation instead of enum for now
   validates :state, inclusion: { in: %w[new in_progress completed] }
   
   def pending?
@@ -27,7 +26,6 @@ class Matter < ApplicationRecord
     update!(state: 'completed')
   end
   
-  # Scopes
   scope :pending, -> { where(state: 'new') }
   scope :in_progress, -> { where(state: 'in_progress') }
   scope :completed, -> { where(state: 'completed') }
