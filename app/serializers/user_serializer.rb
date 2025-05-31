@@ -8,6 +8,7 @@ class UserSerializer
       id: @user.id,
       name: @user.name,
       email: @user.email,
+      firm_name: @user.firm_name,
       created_at: @user.created_at,
       matters_count: @user.matters.count,
       pending_matters_count: @user.pending_matters.count,
