@@ -4,16 +4,21 @@ class UserSerializer
   end
   
   def as_json
-    {
+    result = {
       id: @user.id,
       name: @user.name,
       email: @user.email,
-      firm_name: @user.firm_name,
+      phone: @user.phone,
+      role: @user.role,
       created_at: @user.created_at,
       matters_count: @user.matters.count,
-      pending_matters_count: @user.pending_matters.count,
-      in_progress_matters_count: @user.in_progress_matters.count,
-      completed_matters_count: @user.completed_matters.count
+      pending_matters_count: @user.matters.pending.count,
+      in_progress_matters_count: @user.matters.in_progress.count,
+      completed_matters_count: @user.matters.completed.count
     }
+    
+    result[:firm_name] = @user.firm_name if @user.admin?
+    
+    result
   end
 end

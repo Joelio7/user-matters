@@ -1,4 +1,4 @@
-class ApplicationController < ActionController::API
+class Api::ApplicationController < ActionController::API
   include ExceptionHandler
   include Pundit::Authorization
   

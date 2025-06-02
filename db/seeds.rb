@@ -5,9 +5,9 @@ User.destroy_all
 puts "Creating seed data..."
 
 admin_names = [
-  { name: "Sarah Johnson", email: "sarah.admin@usermatters.com", firm: "User Matters Legal" },
-  { name: "Michael Chen", email: "michael.admin@usermatters.com", firm: "User Matters Legal" },
-  { name: "Elena Rodriguez", email: "elena.admin@usermatters.com", firm: "User Matters Legal" }
+  { name: "Sarah Johnson", email: "sarah.admin@usermatters.com", firm: "User Matters Legal", phone: "5559001234" },
+  { name: "Michael Chen", email: "michael.admin@usermatters.com", firm: "User Matters Legal", phone: "5559001235" },
+  { name: "Elena Rodriguez", email: "elena.admin@usermatters.com", firm: "User Matters Legal", phone: "5559001236" }
 ]
 
 admins = []
@@ -15,6 +15,7 @@ admin_names.each do |admin_data|
   admin = User.create!(
     name: admin_data[:name],
     email: admin_data[:email],
+    phone: admin_data[:phone],
     password: "admin123456",
     firm_name: admin_data[:firm],
     role: "admin"
@@ -24,16 +25,16 @@ admin_names.each do |admin_data|
 end
 
 customer_names = [
-  { name: "John Smith", email: "john.smith@acmecorp.com", firm: "Acme Corporation" },
-  { name: "Emily Davis", email: "emily.davis@techstart.io", firm: "TechStart Solutions" },
-  { name: "Robert Wilson", email: "robert.wilson@greenfield.org", firm: "Greenfield Industries" },
-  { name: "Maria Garcia", email: "maria.garcia@globaltech.com", firm: "GlobalTech Inc" },
-  { name: "David Brown", email: "david.brown@innovate.co", firm: "Innovate Co" },
-  { name: "Jennifer Lee", email: "jennifer.lee@brightfuture.net", firm: "Bright Future LLC" },
-  { name: "Christopher Taylor", email: "chris.taylor@nexusgroup.com", firm: "Nexus Group" },
-  { name: "Amanda White", email: "amanda.white@peakperform.biz", firm: "Peak Performance Ltd" },
-  { name: "Ryan Martinez", email: "ryan.martinez@stellardesign.com", firm: "Stellar Design Studio" },
-  { name: "Lisa Thompson", email: "lisa.thompson@dynamicventures.com", firm: "Dynamic Ventures" }
+  { name: "John Smith", email: "john.smith@acmecorp.com", phone: "5551234567" },
+  { name: "Emily Davis", email: "emily.davis@techstart.io", phone: "5552345678" },
+  { name: "Robert Wilson", email: "robert.wilson@greenfield.org", phone: "5553456789" },
+  { name: "Maria Garcia", email: "maria.garcia@globaltech.com", phone: "5554567890" },
+  { name: "David Brown", email: "david.brown@innovate.co", phone: "5555678901" },
+  { name: "Jennifer Lee", email: "jennifer.lee@brightfuture.net", phone: "5556789012" },
+  { name: "Christopher Taylor", email: "chris.taylor@nexusgroup.com", phone: "5557890123" },
+  { name: "Amanda White", email: "amanda.white@peakperform.biz", phone: "5558901234" },
+  { name: "Ryan Martinez", email: "ryan.martinez@stellardesign.com", phone: "5559012345" },
+  { name: "Lisa Thompson", email: "lisa.thompson@dynamicventures.com", phone: "5550123456" }
 ]
 
 customers = []
@@ -41,8 +42,8 @@ customer_names.each do |customer_data|
   customer = User.create!(
     name: customer_data[:name],
     email: customer_data[:email],
+    phone: customer_data[:phone],
     password: "customer123",
-    firm_name: customer_data[:firm],
     role: "customer"
   )
   customers << customer
@@ -141,6 +142,7 @@ states = ['new', 'in_progress', 'completed']
   
   due_date = rand(-1.week..8.weeks).seconds.from_now
   
+  # Random state
   state = states.sample
   
   matter = Matter.create!(

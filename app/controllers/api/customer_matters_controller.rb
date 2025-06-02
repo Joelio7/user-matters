@@ -1,18 +1,18 @@
-class Api::MattersController < Api::ApplicationController
+class Api::CustomerMattersController < Api::ApplicationController
   include ExceptionHandler
   
   before_action :authenticate_request
+  before_action :ensure_admin!
+  before_action :set_customer
   before_action :set_matter, only: [:show, :update, :destroy]
   
   def index
-    authorize Matter
-    matters = policy_scope(Matter).includes(:user)
+    matters = @customer.matters.includes(:user)
     render json: matters.map { |matter| MatterSerializer.new(matter).as_json }
   end
   
   def create
-    authorize Matter
-    matter = current_user.matters.build(matter_params)
+    matter = @customer.matters.build(matter_params)
     
     if matter.save
       render json: MatterSerializer.new(matter).as_json, status: :created
@@ -25,13 +25,10 @@ class Api::MattersController < Api::ApplicationController
   end
   
   def show
-    authorize @matter
     render json: MatterSerializer.new(@matter).as_json
   end
   
   def update
-    authorize @matter
-    
     if @matter.update(matter_params)
       render json: MatterSerializer.new(@matter).as_json
     else
@@ -43,7 +40,6 @@ class Api::MattersController < Api::ApplicationController
   end
   
   def destroy
-    authorize @matter
     @matter.destroy
     head :no_content
   end
@@ -56,14 +52,24 @@ class Api::MattersController < Api::ApplicationController
   
   attr_reader :current_user
   
-  def set_matter
-    if current_user.admin?
-      @matter = Matter.find(params[:id])
-    else
-      @matter = current_user.matters.find(params[:id])
+  def ensure_admin!
+    unless current_user&.admin?
+      render json: ErrorSerializer.new(
+        message: 'Admin access required'
+      ).as_json, status: :forbidden
     end
+  end
+  
+  def set_customer
+    @customer = User.customer.find(params[:customer_id])
   rescue ActiveRecord::RecordNotFound
-    render json: ErrorSerializer.new(message: 'Matter not found').as_json, status: :not_found
+    render json: ErrorSerializer.new(message: 'Customer not found').as_json, status: :not_found
+  end
+  
+  def set_matter
+    @matter = @customer.matters.find(params[:id])
+  rescue ActiveRecord::RecordNotFound
+    render json: ErrorSerializer.new(message: 'Matter not found for this customer').as_json, status: :not_found
   end
   
   def matter_params

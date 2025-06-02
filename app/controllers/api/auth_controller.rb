@@ -1,7 +1,7 @@
 class Api::AuthController < Api::ApplicationController
   include ExceptionHandler
   
-  before_action :authenticate_request, only: [:me]
+  before_action :authenticate_request, only: [:me, :update_profile]
   
   def signup
     user = User.new(user_params.merge(role: 'customer'))
@@ -44,6 +44,17 @@ class Api::AuthController < Api::ApplicationController
     render json: UserSerializer.new(current_user).as_json, status: :ok
   end
   
+  def update_profile
+    if current_user.update(profile_params)
+      render json: UserSerializer.new(current_user).as_json, status: :ok
+    else
+      render json: ErrorSerializer.new(
+        message: 'Profile could not be updated',
+        errors: current_user.errors.full_messages
+      ).as_json, status: :unprocessable_entity
+    end
+  end
+  
   private
   
   def authenticate_request
@@ -53,6 +64,14 @@ class Api::AuthController < Api::ApplicationController
   attr_reader :current_user
   
   def user_params
-    params.permit(:name, :email, :password, :firm_name)
+    params.permit(:name, :email, :phone, :password)
+  end
+  
+  def profile_params
+    if current_user.admin?
+      params.permit(:name, :email, :phone, :firm_name)
+    else
+      params.permit(:name, :email, :phone)
+    end
   end
 end

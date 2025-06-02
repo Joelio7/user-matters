@@ -3,11 +3,15 @@ Rails.application.routes.draw do
     namespace :auth do
       post :signup
       post :login
-      get :me
+      get :me              
+      put :profile        
     end
     
-    resources :users
     resources :matters
+    
+    resources :customers do
+      resources :matters, controller: 'customer_matters'
+    end
   end
   
   get "up" => "rails/health#show", as: :rails_health_check
