@@ -2,7 +2,7 @@ class CustomerSerializer
   def initialize(customer)
     @customer = customer
   end
-  
+
   def as_json
     {
       id: @customer.id,

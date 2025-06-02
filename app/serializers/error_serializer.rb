@@ -3,7 +3,7 @@ class ErrorSerializer
     @message = message
     @errors = errors
   end
-  
+
   def as_json
     result = { message: @message }
     result[:errors] = @errors if @errors

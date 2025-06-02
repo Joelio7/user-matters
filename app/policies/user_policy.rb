@@ -37,7 +37,7 @@ class UserPolicy < ApplicationPolicy
   class Scope < Scope
     def resolve
       case user.role
-      when 'admin'
+      when "admin"
         scope.all
       else
         scope.where(id: user.id)

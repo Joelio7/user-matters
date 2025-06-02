@@ -4,7 +4,7 @@ class AuthResponseSerializer
     @token = token
     @user = user
   end
-  
+
   def as_json
     {
       message: @message,

@@ -2,7 +2,7 @@ class MatterSerializer
   def initialize(matter)
     @matter = matter
   end
-  
+
   def as_json
     result = {
       id: @matter.id,
@@ -14,7 +14,7 @@ class MatterSerializer
       created_at: @matter.created_at,
       updated_at: @matter.updated_at
     }
-    
+
     if @matter.association(:user).loaded?
       result[:user] = {
         id: @matter.user.id,
@@ -22,7 +22,7 @@ class MatterSerializer
         email: @matter.user.email
       }
     end
-    
+
     result
   end
 end
